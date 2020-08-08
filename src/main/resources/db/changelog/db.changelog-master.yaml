@@ -1,0 +1,92 @@
+databaseChangeLog:
+  - runningAs:
+      username: postgres
+  - changeSet:
+      id: create-table-product
+      author: domodro
+      changes:
+        - createTable:
+            tableName: simple_shop_product
+            columns:
+              - column:
+                  name: id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: number(12, 2)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: create-table-order
+      author: domodro
+      changes:
+        - createTable:
+            tableName: simple_shop_order
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    autoIncrement: true
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: datetime
+                  constraints:
+                    nullable: false
+        - createSequence:
+            sequenceName: simple_shop_order_id_seq
+  - changeSet:
+      id: create-table-order-item
+      author: domodro
+      changes:
+        - createTable:
+            tableName: simple_shop_order_item
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    autoIncrement: true
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_item_order_id
+                    references: simple_shop_order(id)
+              - column:
+                  name: quantity
+                  type: number(12, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_item_product_id
+                    references: simple_shop_product(id)
+              - column:
+                  name: price
+                  type: number(20, 2)
+                  constraints:
+                    nullable: false
+        - createSequence:
+            sequenceName: simple_shop_order_item_id_seq
